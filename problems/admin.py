@@ -10,6 +10,13 @@ class OrderAdmin(admin.ModelAdmin):
         queryset = super().get_queryset(request)
         return queryset.order_by("question_id", "content_type", "section_order")
 
+class SolutionAdmin(admin.ModelAdmin):
+    list_display = ("solution_uid", "question_id", "order_id")
+    
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.order_by("question_id")
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Question)
-admin.site.register(Solution)
+admin.site.register(Solution, SolutionAdmin)

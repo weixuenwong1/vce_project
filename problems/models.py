@@ -29,10 +29,9 @@ class Order(models.Model):
 
     class Meta:
         db_table = 'order'
-        ordering = ['section_order']
     
     def __str__(self):
-        return f"{self.question_id}, {self.order_uid}: {self.text_content[:40]}"
+        return f"{self.question_id}, {self.text_content[:50]}"
 
 class Solution(models.Model):
     solution_uid = models.BigAutoField(primary_key=True)
