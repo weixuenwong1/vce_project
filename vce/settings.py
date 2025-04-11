@@ -37,9 +37,12 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'contents',
     'problems',
+    'accounts',
     'storages',
     'rest_framework',
-    
+    'corsheaders',
+    'knox',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,14 +51,28 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    #'accounts.auth_backend.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
 ]
 
 ROOT_URLCONF = 'vce.urls'
@@ -76,7 +93,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'vce.wsgi.application'
+WSGI_APPLICATION = 'vce.wsgi.application' 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+}
 
 
 # Database
@@ -147,4 +168,3 @@ AWS_S3_SIGNATURE_VERSION = os.getenv("AWS_S3_SIGNATURE_VERSION")
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
-
